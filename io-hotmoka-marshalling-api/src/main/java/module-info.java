@@ -17,6 +17,6 @@ limitations under the License.
 /**
  * This module defines the API for efficient serialization/deserialization of objects into bytes.
  */
-module io.hotmoka.marshalling.api {
+module expected {
 	exports io.hotmoka.marshalling.api;
 }
