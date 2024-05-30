@@ -67,6 +67,11 @@ public class UnmarshallingContextImpl implements UnmarshallingContext {
 	}
 
 	@Override
+	public int available() throws IOException {
+		return ois.available();
+	}
+
+	@Override
 	public <C> C readObject(Class<C> clazz) throws IOException {
 		@SuppressWarnings("unchecked")
 		var ou = (ObjectUnmarshaller<C>) objectUnmarshallers.get(clazz);
@@ -169,6 +174,26 @@ public class UnmarshallingContextImpl implements UnmarshallingContext {
 			throw new IOException(mismatchErrorMessage);
 
 		return bytes;
+	}
+
+	@Override
+	public byte[] readAllBytes() throws IOException {
+		return ois.readAllBytes();
+	}
+
+	/**
+	 * Reads the requested number of bytes into the given byte array.
+	 *
+	 * @param  b the byte array into which the data is read
+	 * @param  off the start offset in {@code b} at which the data is written
+	 * @param  len the maximum number of bytes to read
+	 * @return the actual number of bytes read into the buffer
+	 * @throws IOException if an I/O error occurs
+	 * @throws IndexOutOfBoundsException If {@code off} is negative, {@code len}
+	 *         is negative, or {@code len} is greater than {@code b.length - off}
+	 */
+	public int readNBytes(byte[] b, int off, int len) throws IOException {
+		return ois.readNBytes(b, off, len);
 	}
 
 	@Override

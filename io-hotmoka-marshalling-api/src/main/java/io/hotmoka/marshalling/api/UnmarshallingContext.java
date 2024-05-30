@@ -26,6 +26,14 @@ import java.util.function.Function;
 public interface UnmarshallingContext extends AutoCloseable {
 
 	/**
+	 * Yields the number of bytes that can be read without blocking.
+	 * 
+	 * @return the number of bytes
+	 * @throws IOException if an I/O error occurs
+	 */
+	int available() throws IOException;
+
+	/**
 	 * Extracts an object from this context, which must have an object unmarshaller
 	 * registered for the class of the object.
 	 * 
@@ -68,6 +76,27 @@ public interface UnmarshallingContext extends AutoCloseable {
 	 * @throws IOException if an I/O error occurs
 	 */
 	byte[] readLengthAndBytes(String mismatchErrorMessage) throws IOException;
+
+	/**
+	 * Reads the requested number of bytes into the given byte array.
+	 *
+	 * @param  b the byte array into which the data is read
+	 * @param  off the start offset in {@code b} at which the data is written
+	 * @param  len the maximum number of bytes to read
+	 * @return the actual number of bytes read into the buffer
+	 * @throws IOException if an I/O error occurs
+	 * @throws IndexOutOfBoundsException If {@code off} is negative, {@code len}
+	 *         is negative, or {@code len} is greater than {@code b.length - off}
+	 */
+	int readNBytes(byte[] b, int off, int len) throws IOException;
+
+	/**
+	 * Reads all remaining bytes.
+	 *
+	 * @return a byte array containing all remaining bytes
+	 * @throws IOException if an I/O error occurs
+	 */
+	byte[] readAllBytes() throws IOException;
 
 	/**
 	 * Extracts the next byte from this context.
