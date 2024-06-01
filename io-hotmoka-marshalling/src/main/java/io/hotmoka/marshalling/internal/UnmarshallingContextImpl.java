@@ -17,9 +17,9 @@ limitations under the License.
 package io.hotmoka.marshalling.internal;
 
 import java.io.BufferedInputStream;
+import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.ObjectInputStream;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
@@ -35,7 +35,7 @@ import io.hotmoka.marshalling.api.UnmarshallingContext;
  * Implementation of a context used during bytes unmarshalling into objects.
  */
 public class UnmarshallingContextImpl implements UnmarshallingContext {
-	private final ObjectInputStream ois;
+	private final DataInputStream dis;
 
 	/**
 	 * A memory to avoid duplicated strings in the marshalled bytes.
@@ -54,7 +54,7 @@ public class UnmarshallingContextImpl implements UnmarshallingContext {
 	 * @throws IOException if the context cannot be created
 	 */
 	public UnmarshallingContextImpl(InputStream is) throws IOException {
-		this.ois = new ObjectInputStream(new BufferedInputStream(is));
+		this.dis = new DataInputStream(new BufferedInputStream(is));
 	}
 
 	/**
@@ -68,7 +68,7 @@ public class UnmarshallingContextImpl implements UnmarshallingContext {
 
 	@Override
 	public int available() throws IOException {
-		return ois.available();
+		return dis.available();
 	}
 
 	@Override
@@ -97,22 +97,22 @@ public class UnmarshallingContextImpl implements UnmarshallingContext {
 
 	@Override
 	public byte readByte() throws IOException {
-		return ois.readByte();
+		return dis.readByte();
 	}
 
 	@Override
 	public char readChar() throws IOException {
-		return ois.readChar();
+		return dis.readChar();
 	}
 
 	@Override
 	public boolean readBoolean() throws IOException {
-		return ois.readBoolean();
+		return dis.readBoolean();
 	}
 
 	@Override
 	public int readInt() throws IOException {
-		return ois.readInt();
+		return dis.readInt();
 	}
 
 	@Override
@@ -130,12 +130,12 @@ public class UnmarshallingContextImpl implements UnmarshallingContext {
 
 	@Override
 	public short readShort() throws IOException {
-		return ois.readShort();
+		return dis.readShort();
 	}
 
 	@Override
 	public long readLong() throws IOException {
-		return ois.readLong();
+		return dis.readLong();
 	}
 
 	@Override
@@ -154,23 +154,23 @@ public class UnmarshallingContextImpl implements UnmarshallingContext {
 
 	@Override
 	public float readFloat() throws IOException {
-		return ois.readFloat();
+		return dis.readFloat();
 	}
 
 	@Override
 	public double readDouble() throws IOException {
-		return ois.readDouble();
+		return dis.readDouble();
 	}
 
 	@Override
 	public String readStringUnshared() throws IOException {
-		return ois.readUTF();
+		return dis.readUTF();
 	}
 
 	@Override
 	public byte[] readBytes(int length, String mismatchErrorMessage) throws IOException {
 		var bytes = new byte[length];
-		if (length != ois.readNBytes(bytes, 0, length))
+		if (length != dis.readNBytes(bytes, 0, length))
 			throw new IOException(mismatchErrorMessage);
 
 		return bytes;
@@ -178,7 +178,7 @@ public class UnmarshallingContextImpl implements UnmarshallingContext {
 
 	@Override
 	public byte[] readAllBytes() throws IOException {
-		return ois.readAllBytes();
+		return dis.readAllBytes();
 	}
 
 	/**
@@ -193,7 +193,7 @@ public class UnmarshallingContextImpl implements UnmarshallingContext {
 	 *         is negative, or {@code len} is greater than {@code b.length - off}
 	 */
 	public int readNBytes(byte[] b, int off, int len) throws IOException {
-		return ois.readNBytes(b, off, len);
+		return dis.readNBytes(b, off, len);
 	}
 
 	@Override
@@ -235,6 +235,6 @@ public class UnmarshallingContextImpl implements UnmarshallingContext {
 
 	@Override
 	public void close() throws IOException {
-		ois.close();
+		dis.close();
 	}
 }

@@ -16,8 +16,8 @@ limitations under the License.
 
 package io.hotmoka.marshalling.internal;
 
+import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.math.BigInteger;
 import java.util.HashMap;
@@ -31,7 +31,7 @@ import io.hotmoka.marshalling.api.ObjectMarshaller;
  * Implementation of a context used during object marshaling into bytes.
  */
 public class MarshallingContextImpl implements MarshallingContext {
-	private final ObjectOutputStream oos;
+	private final DataOutputStream dos;
 	private final Map<String, Integer> memoryString = new HashMap<>();
 
 	/**
@@ -40,7 +40,7 @@ public class MarshallingContextImpl implements MarshallingContext {
 	private final Map<Class<?>, ObjectMarshaller<?>> objectMarshallers = new HashMap<>();
 
 	public MarshallingContextImpl(OutputStream oos) throws IOException {
-		this.oos = new ObjectOutputStream(oos);
+		this.dos = new DataOutputStream(oos);
 	}
 
 	/**
@@ -57,7 +57,7 @@ public class MarshallingContextImpl implements MarshallingContext {
 		@SuppressWarnings("unchecked")
 		var om = (ObjectMarshaller<C>) objectMarshallers.get(clazz);
 		if (om == null)
-			throw new IllegalStateException("missing object marshaller for class " + clazz.getName());
+			throw new IOException("Missing object marshaller for class " + clazz.getName());
 
 		om.write(value, this);
 	}
@@ -68,10 +68,10 @@ public class MarshallingContextImpl implements MarshallingContext {
 
 		if (index != null) {
 			if (index < 254)
-				oos.writeByte(index);
+				dos.writeByte(index);
 			else {
-				oos.writeByte(254);
-				oos.writeInt(index);
+				dos.writeByte(254);
+				dos.writeInt(index);
 			}
 		}
 		else {
@@ -81,24 +81,24 @@ public class MarshallingContextImpl implements MarshallingContext {
 
 			memoryString.put(s, next);
 
-			oos.writeByte(255);
-			oos.writeUTF(s);
+			dos.writeByte(255);
+			dos.writeUTF(s);
 		}
 	}
 
 	@Override
 	public void writeByte(int b) throws IOException {
-		oos.writeByte(b);
+		dos.writeByte(b);
 	}
 
 	@Override
 	public void writeChar(int c) throws IOException {
-		oos.writeChar(c);
+		dos.writeChar(c);
 	}
 
 	@Override
 	public void writeInt(int i) throws IOException {
-		oos.writeInt(i);
+		dos.writeInt(i);
 	}
 
 	@Override
@@ -117,12 +117,12 @@ public class MarshallingContextImpl implements MarshallingContext {
 
 	@Override
 	public void writeStringUnshared(String s) throws IOException {
-		oos.writeUTF(s);
+		dos.writeUTF(s);
 	}
 
 	@Override
 	public void writeBytes(byte[] bytes) throws IOException {
-		oos.write(bytes);
+		dos.write(bytes);
 	}
 
 	@Override
@@ -141,17 +141,17 @@ public class MarshallingContextImpl implements MarshallingContext {
 
 	@Override
 	public void writeDouble(double d) throws IOException {
-		oos.writeDouble(d);
+		dos.writeDouble(d);
 	}
 
 	@Override
 	public void writeFloat(float f) throws IOException {
-		oos.writeFloat(f);
+		dos.writeFloat(f);
 	}
 
 	@Override
 	public void writeLong(long l) throws IOException {
-		oos.writeLong(l);
+		dos.writeLong(l);
 	}
 
 	@Override
@@ -174,12 +174,12 @@ public class MarshallingContextImpl implements MarshallingContext {
 
 	@Override
 	public void writeShort(int s) throws IOException {
-		oos.writeShort(s);
+		dos.writeShort(s);
 	}
 
 	@Override
 	public void writeBoolean(boolean b) throws IOException {
-		oos.writeBoolean(b);
+		dos.writeBoolean(b);
 	}
 
 	@Override
@@ -210,11 +210,11 @@ public class MarshallingContextImpl implements MarshallingContext {
 
 	@Override
 	public void flush() throws IOException {
-		oos.flush();
+		dos.flush();
 	}
 
 	@Override
 	public void close() throws IOException {
-		oos.close();
+		dos.close();
 	}
 }
