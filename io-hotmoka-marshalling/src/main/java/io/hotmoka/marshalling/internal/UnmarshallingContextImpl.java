@@ -51,9 +51,8 @@ public class UnmarshallingContextImpl implements UnmarshallingContext {
 	 * Creates an unmarshalling context.
 	 * 
 	 * @param is the input stream of the context
-	 * @throws IOException if the context cannot be created
 	 */
-	public UnmarshallingContextImpl(InputStream is) throws IOException {
+	public UnmarshallingContextImpl(InputStream is) {
 		this.dis = new DataInputStream(new BufferedInputStream(is));
 	}
 
