@@ -39,7 +39,7 @@ public class MarshallingContextImpl implements MarshallingContext {
 	 */
 	private final Map<Class<?>, ObjectMarshaller<?>> objectMarshallers = new HashMap<>();
 
-	public MarshallingContextImpl(OutputStream oos) throws IOException {
+	public MarshallingContextImpl(OutputStream oos) {
 		this.dos = new DataOutputStream(oos);
 	}
 

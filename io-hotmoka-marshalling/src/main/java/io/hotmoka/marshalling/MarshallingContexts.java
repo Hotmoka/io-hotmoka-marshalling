@@ -16,7 +16,6 @@ limitations under the License.
 
 package io.hotmoka.marshalling;
 
-import java.io.IOException;
 import java.io.OutputStream;
 
 import io.hotmoka.marshalling.api.MarshallingContext;
@@ -34,9 +33,8 @@ public final class MarshallingContexts {
 	 * 
 	 * @param os the output stream
 	 * @return the marshalling context
-	 * @throws IOException if the context cannot be created
 	 */
-	public static MarshallingContext of(OutputStream os) throws IOException {
+	public static MarshallingContext of(OutputStream os) {
 		return new MarshallingContextImpl(os);
 	}
 }

@@ -54,9 +54,8 @@ public abstract class MarshallableImpl implements Marshallable {
 	 * 
 	 * @param os the output stream of the context
 	 * @return the default marshalling context. Subclasses may provide a more efficient context
-	 * @throws IOException if the marshalling context cannot be created
 	 */
-	protected MarshallingContext createMarshallingContext(OutputStream os) throws IOException {
+	protected MarshallingContext createMarshallingContext(OutputStream os) {
 		return new MarshallingContextImpl(os);
 	}
 }

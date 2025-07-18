@@ -16,7 +16,6 @@ limitations under the License.
 
 package io.hotmoka.marshalling;
 
-import java.io.IOException;
 import java.io.OutputStream;
 
 import io.hotmoka.marshalling.internal.MarshallingContextImpl;
@@ -30,9 +29,8 @@ public abstract class AbstractMarshallingContext extends MarshallingContextImpl 
 	 * Creates a marshalling context for the given output stream.
 	 * 
 	 * @param oos the output stream
-	 * @throws IOException if the marshalling context could not be created
 	 */
-	protected AbstractMarshallingContext(OutputStream oos) throws IOException {
+	protected AbstractMarshallingContext(OutputStream oos) {
 		super(oos);
 	}
 }

@@ -26,7 +26,7 @@ Note: submodules whose artifact must be deployed on Maven Central must activate 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.release>17</maven.compiler.release>
-    <io.hotmoka.marshalling.version>1.4.5</io.hotmoka.marshalling.version>
+    <io.hotmoka.marshalling.version>1.4.6</io.hotmoka.marshalling.version>
     <io.hotmoka.testing.version>1.4.1</io.hotmoka.testing.version>
   </properties>
 
