@@ -20,6 +20,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -77,13 +78,18 @@ public class MarshallingContextImpl implements MarshallingContext {
 		else {
 			int next = memoryString.size();
 			if (next == Integer.MAX_VALUE) // irrealistic
-				throw new IllegalStateException("too many strings in the same context");
+				throw new IOException("too many strings in the same context");
 
 			memoryString.put(s, next);
 
 			dos.writeByte(255);
-			dos.writeUTF(s);
+			writeLengthAndBytes(s.getBytes(StandardCharsets.UTF_8));
 		}
+	}
+
+	@Override
+	public final void writeStringUnshared(String s) throws IOException {
+		writeLengthAndBytes(s.getBytes(StandardCharsets.UTF_8));
 	}
 
 	@Override
@@ -113,11 +119,6 @@ public class MarshallingContextImpl implements MarshallingContext {
 			writeByte(255);
 			writeInt(i);
 		}
-	}
-
-	@Override
-	public void writeStringUnshared(String s) throws IOException {
-		dos.writeUTF(s);
 	}
 
 	@Override

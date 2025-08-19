@@ -19,6 +19,7 @@ package io.hotmoka.marshalling.internal;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.UncheckedIOException;
 
 import io.hotmoka.marshalling.api.Marshallable;
 import io.hotmoka.marshalling.api.MarshallingContext;
@@ -40,7 +41,7 @@ public abstract class MarshallableImpl implements Marshallable {
 		}
 		catch (IOException e) {
 			// impossible with a ByteArrayOutputStream
-			throw new RuntimeException("Unexpected exception", e);
+			throw new UncheckedIOException("Unexpected exception", e);
 		}
 	}
 

@@ -21,6 +21,7 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -163,7 +164,24 @@ public class UnmarshallingContextImpl implements UnmarshallingContext {
 
 	@Override
 	public String readStringUnshared() throws IOException {
-		return dis.readUTF();
+		return new String(readLengthAndBytes("String length mismatch"), StandardCharsets.UTF_8);
+	}
+
+	@Override
+	public String readStringShared() throws IOException {
+		int selector = readByte();
+		if (selector < 0)
+			selector = 256 + selector;
+	
+		if (selector == 254)
+			return memoryString.get(readInt());
+		else if (selector == 255) {
+			String s = new String(readLengthAndBytes("String length mismatch"), StandardCharsets.UTF_8);
+			memoryString.put(memoryString.size(), s);
+			return s;
+		}
+		else
+			return memoryString.get(selector);
 	}
 
 	@Override
@@ -193,23 +211,6 @@ public class UnmarshallingContextImpl implements UnmarshallingContext {
 	 */
 	public int readNBytes(byte[] b, int off, int len) throws IOException {
 		return dis.readNBytes(b, off, len);
-	}
-
-	@Override
-	public String readStringShared() throws IOException {
-		int selector = readByte();
-		if (selector < 0)
-			selector = 256 + selector;
-
-		if (selector == 255) {
-			String s = readStringUnshared();
-			memoryString.put(memoryString.size(), s);
-			return s;
-		}
-		else if (selector == 254)
-			return memoryString.get(readInt());
-		else
-			return memoryString.get(selector);
 	}
 
 	@Override
