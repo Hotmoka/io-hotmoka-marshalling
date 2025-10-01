@@ -187,7 +187,7 @@ public class UnmarshallingContextImpl implements UnmarshallingContext {
 	@Override
 	public byte[] readBytes(int length, String mismatchErrorMessage) throws IOException {
 		var bytes = new byte[length];
-		if (length != dis.readNBytes(bytes, 0, length))
+		if (length != dis.read(bytes))
 			throw new IOException(mismatchErrorMessage);
 
 		return bytes;
@@ -198,17 +198,7 @@ public class UnmarshallingContextImpl implements UnmarshallingContext {
 		return dis.readAllBytes();
 	}
 
-	/**
-	 * Reads the requested number of bytes into the given byte array.
-	 *
-	 * @param  b the byte array into which the data is read
-	 * @param  off the start offset in {@code b} at which the data is written
-	 * @param  len the maximum number of bytes to read
-	 * @return the actual number of bytes read into the buffer
-	 * @throws IOException if an I/O error occurs
-	 * @throws IndexOutOfBoundsException If {@code off} is negative, {@code len}
-	 *         is negative, or {@code len} is greater than {@code b.length - off}
-	 */
+	@Override
 	public int readNBytes(byte[] b, int off, int len) throws IOException {
 		return dis.readNBytes(b, off, len);
 	}
