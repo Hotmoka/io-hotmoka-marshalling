@@ -60,7 +60,7 @@ public class UnmarshallingContextImpl implements UnmarshallingContext {
 	/**
 	 * Registers an object unmarshaller. It will be used to unmarshall its class.
 	 * 
-	 * @param om the object unmarhaller
+	 * @param ou the object unmarshaller
 	 */
 	protected void registerObjectUnmarshaller(ObjectUnmarshaller<?> ou) {
 		objectUnmarshallers.put(ou.clazz(), ou);
